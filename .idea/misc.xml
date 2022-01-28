@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/bookCollection_-main/app/src/main/res/drawable-anydpi/ic_add.xml" value="0.2703125" />
+        <entry key="..\:/bookCollection_-main/app/src/main/res/drawable-anydpi/ic_f_start.xml" value="0.2703125" />
+        <entry key="..\:/bookCollection_-main/app/src/main/res/drawable-anydpi/ic_home.xml" value="0.2703125" />
+        <entry key="..\:/bookCollection_-main/app/src/main/res/drawable-xxhdpi/ic_star.xml" value="0.2546875" />
+        <entry key="..\:/bookCollection_-main/app/src/main/res/drawable/ic_baseline_star_24.xml" value="0.2703125" />
+        <entry key="..\:/bookCollection_-main/app/src/main/res/drawable/ic_f_start.xml" value="0.12" />
+        <entry key="..\:/bookCollection_-main/app/src/main/res/layout/activity_addbook.xml" value="0.264" />
+        <entry key="..\:/bookCollection_-main/app/src/main/res/layout/activity_book_details.xml" value="0.264" />
+        <entry key="..\:/bookCollection_-main/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/bookCollection_-main/app/src/main/res/layout/activity_main2.xml" value="0.1793478260869565" />
+        <entry key="..\:/bookCollection_-main/app/src/main/res/layout/activity_mycollection.xml" value="0.264" />
+        <entry key="..\:/bookCollection_-main/app/src/main/res/layout/fav_book.xml" value="0.18297101449275363" />
+        <entry key="..\:/bookCollection_-main/app/src/main/res/layout/home_fragment.xml" value="0.264" />
+        <entry key="..\:/bookCollection_-main/app/src/main/res/layout/home_fragment2.xml" value="0.1793478260869565" />
+        <entry key="..\:/bookCollection_-main/app/src/main/res/layout/item_book.xml" value="0.2" />
+        <entry key="..\:/bookCollection_-main/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2703125" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

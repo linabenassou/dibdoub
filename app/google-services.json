@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "245007785236",
+    "project_id": "bibliotheques-a8f0e",
+    "storage_bucket": "bibliotheques-a8f0e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:245007785236:android:6869591d25a2b3268c7601",
+        "android_client_info": {
+          "package_name": "dz.ubma.bookcollection_"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "245007785236-l54jupv07ddqaqhjn9svcksf3ri8q5h7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzG70AmL5YMNYt21wV_qODnQr_pspil90"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "245007785236-l54jupv07ddqaqhjn9svcksf3ri8q5h7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

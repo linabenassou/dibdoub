@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BookDetails">
+
+
+    <TextView
+        android:id="@+id/title1"
+        android:layout_width="340dp"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:layout_marginTop="250dp"
+        android:layout_marginLeft="20dp"
+        android:hint="Title"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/description1"
+        android:layout_width="340dp"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:layout_marginTop="350dp"
+        android:layout_marginLeft="20dp"
+        android:hint="Description"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/year1"
+        android:layout_width="340dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="450dp"
+        android:ems="10"
+        android:hint="Year"
+        android:inputType="textPersonName"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="181dp"
+        android:layout_height="153dp"
+        app:srcCompat="@drawable/book_icon"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="197dp"
+        tools:layout_editor_absoluteY="56dp" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="410dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:background="@color/green"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints"
+        android:layout_marginTop="670dp"
+        />
+
+    <Button
+        android:id="@+id/home"
+        android:layout_width="128dp"
+        android:layout_height="59dp"
+        android:drawableTop="@drawable/ic_home"
+        android:text="Home"
+        tools:ignore="MissingConstraints"
+        android:layout_marginTop="668dp"
+        android:layout_marginLeft="3dp"  />
+
+    <Button
+        android:id="@+id/mycollection"
+        android:layout_width="123dp"
+        android:layout_height="48dp"
+        android:background="@color/yellow"
+        android:drawableTop="@drawable/ic_f_start"
+        android:text="My collection"
+        tools:ignore="MissingConstraints"
+        android:layout_marginTop="673dp"
+        android:layout_marginLeft="142dp"  />
+
+    <Button
+        android:id="@+id/add"
+        android:layout_width="123dp"
+        android:layout_height="48dp"
+        android:background="@color/yellow"
+        android:drawableTop="@drawable/ic_add"
+        android:text="Add"
+        tools:ignore="MissingConstraints"
+        android:layout_marginTop="673dp"
+        android:layout_marginLeft="280dp" />
+
+
+
+</RelativeLayout>
