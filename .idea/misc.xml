@@ -9,16 +9,18 @@
         <entry key="..\:/bookCollection_-main/app/src/main/res/drawable-xxhdpi/ic_star.xml" value="0.2546875" />
         <entry key="..\:/bookCollection_-main/app/src/main/res/drawable/ic_baseline_star_24.xml" value="0.2703125" />
         <entry key="..\:/bookCollection_-main/app/src/main/res/drawable/ic_f_start.xml" value="0.12" />
+        <entry key="..\:/bookCollection_-main/app/src/main/res/drawable/star.xml" value="0.2703125" />
         <entry key="..\:/bookCollection_-main/app/src/main/res/layout/activity_addbook.xml" value="0.264" />
         <entry key="..\:/bookCollection_-main/app/src/main/res/layout/activity_book_details.xml" value="0.264" />
         <entry key="..\:/bookCollection_-main/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/bookCollection_-main/app/src/main/res/layout/activity_main2.xml" value="0.1793478260869565" />
         <entry key="..\:/bookCollection_-main/app/src/main/res/layout/activity_mycollection.xml" value="0.264" />
-        <entry key="..\:/bookCollection_-main/app/src/main/res/layout/fav_book.xml" value="0.18297101449275363" />
+        <entry key="..\:/bookCollection_-main/app/src/main/res/layout/fav_book.xml" value="0.536" />
         <entry key="..\:/bookCollection_-main/app/src/main/res/layout/home_fragment.xml" value="0.264" />
         <entry key="..\:/bookCollection_-main/app/src/main/res/layout/home_fragment2.xml" value="0.1793478260869565" />
-        <entry key="..\:/bookCollection_-main/app/src/main/res/layout/item_book.xml" value="0.2" />
+        <entry key="..\:/bookCollection_-main/app/src/main/res/layout/item_book.xml" value="0.4" />
         <entry key="..\:/bookCollection_-main/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2703125" />
+        <entry key="..\:/bookCollection_-main/app/src/main/res/xml/file_paths.xml" value="0.13697916666666668" />
       </map>
     </option>
   </component>

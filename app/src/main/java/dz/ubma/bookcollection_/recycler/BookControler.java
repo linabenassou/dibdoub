@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -103,9 +105,10 @@ public class BookControler {
                 });
     }
 
-    public void updateData(String idBook, int iconStar) {
-        db.collection(COLLECTION_KEY).document(idBook)
-                .update("iconStar", iconStar);
+    public void updateData(String Id, int iconStar) {
+        DatabaseReference ref= FirebaseDatabase.getInstance().getReference();
+        ref.child("book").child(Id).child("iconStar").setValue(iconStar);
+
     }
 
     public void removeListener(){

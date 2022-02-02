@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import dz.ubma.bookcollection_.BookDetails;
 import dz.ubma.bookcollection_.Information;
 import dz.ubma.bookcollection_.R;
+import dz.ubma.bookcollection_.recycler.BookControler;
 
 public class listAdapter extends RecyclerView.Adapter<listAdapter.MyViewHolderCategory> {
 
@@ -84,22 +85,52 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.MyViewHolderCa
                 context.startActivity(intent);
             }
         });
-
-        Log.d("liliwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww", ann);
+        int iconStar = info.getIconStar()==1 ? R.drawable.ic_f_start: R.drawable.ic_star ;
+        holder.star.setImageResource(iconStar);
         holder.star.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addFavoris(info,holder,tit,ann,desc);
+                String idBook= info.getId();
+                info.setIconStar(info.getIconStar()==0? 1 : 0);
+                int iconStar = info.getIconStar()==1 ? R.drawable.ic_f_start: R.drawable.ic_star ;
+               if(info.getIconStar()==0){ removedata(info);
+               }
+
+                holder.star.setImageResource(iconStar);
+
+                BookControler bControler= BookControler.get_instance();
+                bControler.updateData(idBook,info.getIconStar());
+                if(info.getIconStar()==1){
+                addFavoris(info,holder,tit,ann,desc,info.getIconStar());}
+
             }
         });
 
 
+       /* Log.d("liliwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww", ann);
+        holder.star.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });*/
+
+
     }
 
- 
-    private void addFavoris(Information inf,MyViewHolderCategory holder,String Titre,String Year,String Description) {
+
+
+    public void removedata(Information inf){
+
+        DatabaseReference ref= FirebaseDatabase.getInstance().getReference();
+
+        String keyid = inf.getId();
+        ref.child("favoris").child(keyid).removeValue();
+    }
+
+    private void addFavoris(Information inf,MyViewHolderCategory holder,String Titre,String Year,String Description,int icstar) {
         String Id=inf.getId();
-        Information info=new Information(Id,Titre,Description,Year);
+        Information info=new Information(Id,Titre,Description,Year,icstar);
         DatabaseReference ref= FirebaseDatabase.getInstance().getReference();
         ref.child("favoris").child(Id).setValue(info);
 
@@ -111,6 +142,7 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.MyViewHolderCa
     }
 
     class MyViewHolderCategory extends RecyclerView.ViewHolder {
+        private favorisAdapter myAdapter;
 
         TextView  book_title_txt, book_ann_txt ,book_image;
         ImageButton star,add;
@@ -125,6 +157,7 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.MyViewHolderCa
 
 
         }
+
 
     }
 

@@ -8,16 +8,32 @@ public class Information {
 
 
 
+    int iconStar ;
+
+
    String Description;
     String id;
     String Year;
 public Information(){}
 public Information(String id, String Titre, String Description,String Year){//,String image// , String Description,){
+        this.id=id;
+        this.Titre=Titre;
+        this.Description=Description;
+        this.Year=Year;}
+public Information(String id, String Titre, String Description,String Year,int iconStar){//,String image// , String Description,){
     this.id=id;
     this.Titre=Titre;
     this.Description=Description;
     this.Year=Year;
-}
+    this.iconStar = iconStar;
+
+}  public int getIconStar() {
+        return iconStar;
+    }
+
+    public void setIconStar(int iconStar) {
+        this.iconStar = iconStar;
+    }
    /* public String getImage() {
         return image;
     }
