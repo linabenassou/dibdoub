@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -34,12 +35,38 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView books;
     private listAdapter l;
     private ArrayList<Information> infos;
+    Button add_button,Home_button,Mycollection_button,confirm_button,loadImage_button;
+
     @SuppressLint("LongLogTag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         books=findViewById(R.id.rvBooks);
+        add_button = findViewById(R.id.add);
+        Home_button = findViewById(R.id.home);
+        Mycollection_button = findViewById(R.id.mycollection);
+        Home_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),"You are already in the Home page", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        add_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, addbook.class);
+                startActivity(intent);
+            }
+        });
+        Mycollection_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,mycollection.class);
+                startActivity(intent);
+            }
+        });
         loadcategories();
        /* FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fl, new home_fragment2());

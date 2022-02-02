@@ -15,6 +15,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -94,6 +95,7 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.MyViewHolderCa
                 info.setIconStar(info.getIconStar()==0? 1 : 0);
                 int iconStar = info.getIconStar()==1 ? R.drawable.ic_f_start: R.drawable.ic_star ;
                if(info.getIconStar()==0){ removedata(info);
+
                }
 
                 holder.star.setImageResource(iconStar);
@@ -101,7 +103,8 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.MyViewHolderCa
                 BookControler bControler= BookControler.get_instance();
                 bControler.updateData(idBook,info.getIconStar());
                 if(info.getIconStar()==1){
-                addFavoris(info,holder,tit,ann,desc,info.getIconStar());}
+                addFavoris(info,holder,tit,ann,desc,info.getIconStar());
+                }
 
             }
         });
@@ -126,6 +129,8 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.MyViewHolderCa
 
         String keyid = inf.getId();
         ref.child("favoris").child(keyid).removeValue();
+        Toast.makeText(context,"Removed from favorite", Toast.LENGTH_SHORT).show();
+
     }
 
     private void addFavoris(Information inf,MyViewHolderCategory holder,String Titre,String Year,String Description,int icstar) {
@@ -133,6 +138,8 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.MyViewHolderCa
         Information info=new Information(Id,Titre,Description,Year,icstar);
         DatabaseReference ref= FirebaseDatabase.getInstance().getReference();
         ref.child("favoris").child(Id).setValue(info);
+        Toast.makeText(context,"Added to favorite", Toast.LENGTH_SHORT).show();
+
 
     }
 

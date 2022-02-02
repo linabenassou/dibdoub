@@ -23,6 +23,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,6 +33,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseError;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -61,6 +63,7 @@ public class addbook extends AppCompatActivity {
     private StorageReference mStorageReference;
     private Context context;
     int iconStar=0;
+    DatabaseReference postRef;
     public addbook() {
     }
 
@@ -79,6 +82,7 @@ public class addbook extends AppCompatActivity {
         loadImage_button=findViewById(R.id.limage);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mFirebaseMethods=new addbook(addbook.this);
+         postRef= FirebaseDatabase.getInstance().getReference("book");
 
 
         mStorageReference = FirebaseStorage.getInstance().getReference();
@@ -86,7 +90,7 @@ public class addbook extends AppCompatActivity {
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"You are already in the page add", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"You are already in the Add book page", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -109,12 +113,85 @@ public class addbook extends AppCompatActivity {
                 String Titre =title_input.getText().toString();
                 String Description =Description_input.getText().toString();
                 String Year =Year_input.getText().toString();
-                DatabaseReference data= FirebaseDatabase.getInstance().getReference("book");
-                String id=data.push().getKey();
+               // DatabaseReference data= FirebaseDatabase.getInstance().getReference("book");
+                //String id=data.push().getKey();
 
-                addInfos(id,Titre,Description,Year,iconStar);
+                if(TextUtils.isEmpty(Titre)){
+                    title_input.setError("Title is Required.");
+                    return;
+                }
 
-                Toast.makeText(getApplicationContext(),"Added successfully", Toast.LENGTH_SHORT).show();
+                if(TextUtils.isEmpty(Description)){
+                    Description_input.setError("Description is Required.");
+                    return;
+                }
+                if(TextUtils.isEmpty(Year)){
+                    Year_input.setError("Year is Required.");
+                    return;
+                }
+
+
+
+                postRef = FirebaseDatabase.getInstance().getReference().child("book");
+                String id=postRef.push().getKey();
+
+                postRef.orderByChild("titre").equalTo(Titre)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    Toast.makeText(getApplicationContext(), "Book already exist!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    postRef.child(id).setValue(new Information(id, Titre, Description, Year, iconStar));
+                                    Toast.makeText(getApplicationContext(), "Book Added Successfully", Toast.LENGTH_SHORT).show();
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+
+
+                            });
+
+
+
+
+
+
+
+                /*mFirebaseDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        for (DataSnapshot data : dataSnapshot.getChildren()) {
+                           if (!data.child(id).child(Titre).exists()) {
+                               mFirebaseDatabase.child(id).setValue(new Information(id, Titre, Description, Year, iconStar));
+                               Toast.makeText(getApplicationContext(), "Book Added Succesfully", Toast.LENGTH_SHORT).show();
+                           }
+
+                           else {
+                               Toast.makeText(getApplicationContext(), "Book already exist!", Toast.LENGTH_SHORT).show();
+                           }
+                        }}
+
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                    });
+
+
+
+
+
+*/
+
+
+
 
 
             }
@@ -326,10 +403,12 @@ dispatchTakePictureIntent();            }
 
     }
 
-    public void addInfos(String id,String Titre,String Description,String Year,int icstar){
+   /* public void addInfos(String id,String Titre,String Description,String Year,int icstar){
         DatabaseReference data= FirebaseDatabase.getInstance().getReference();
         Information info=new Information(id,Titre,Description,Year,icstar);//,Description,
         data.child("book").child(id).setValue(info);
+        Toast.makeText(getApplicationContext(),"Book added successfully", Toast.LENGTH_SHORT).show();
 
-    }
+
+    }*/
 }
