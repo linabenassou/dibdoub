@@ -64,7 +64,7 @@ public class addbook extends AppCompatActivity {
     int iconStar=0;
     int PICK_IMAGE_REQUEST = 111;
     Uri filePath;
-
+    ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +80,8 @@ public class addbook extends AppCompatActivity {
         images = findViewById(R.id.image);
         uploadImage_button = findViewById(R.id.limage);
         Ref = FirebaseDatabase.getInstance().getReference().child("book");
+        pd=new ProgressDialog(this);
+        pd.setMessage("Uploading....");
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl("gs://bibliotheques-a8f0e.appspot.com");
@@ -145,6 +147,7 @@ public class addbook extends AppCompatActivity {
                                                                   else{
                                                                       // postRef.child(id).setValue(new Information(id, Titre, Description, Year, iconStar));
                                                                       if (filePath != null) {
+                                                                          pd.show();
                                                                           FilePath filePaths = new FilePath();
                                                                           StorageReference childRef = storageRef.child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + id + "/photo 1");
                                                                           //uploading the image
@@ -152,22 +155,26 @@ public class addbook extends AppCompatActivity {
 
                                                                           uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                                                               public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                                                  pd.dismiss();
 
                                                                                   childRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                                                       @Override
                                                                                       public void onSuccess(Uri uri) {
                                                                                           Ref.child(id).setValue(new Information(id, Titre, Description, Year, iconStar, uri.toString()));
+                                                                                          Toast.makeText(getApplicationContext(), "Book Added Successfully", Toast.LENGTH_SHORT).show();
+
                                                                                       }
                                                                                   });
-                                                                                  Toast.makeText(getApplicationContext(), "Book Added Successfully", Toast.LENGTH_SHORT).show();
 
 
                                                                               }
                                                                           }).addOnFailureListener(new OnFailureListener() {
                                                                               @Override
                                                                               public void onFailure(@NonNull Exception e) {
-
+                                                                                  pd.dismiss();
+                                                                                  Toast.makeText(addbook.this, "Upload Failed -> " + e, Toast.LENGTH_SHORT).show();
                                                                               }
+
                                                                           });
                                                                       } else
                                                                           Toast.makeText(getApplicationContext(), "Please select an image", Toast.LENGTH_SHORT).show();
@@ -185,70 +192,7 @@ public class addbook extends AppCompatActivity {
                                                           });
 
 
-                                                 /* Query postRef = FirebaseDatabase.getInstance().getReference().child("book");
 
-
-                                                  postRef.orderByChild("titre").equalTo(Titre)
-                                                          .addListenerForSingleValueEvent(new ValueEventListener() {
-
-
-
-
-
-                                                              @Override
-                                                              public void onDataChange(DataSnapshot data) {
-                                                                      //If email exists then toast shows else store the data on new key
-                                                                      if (data.exists()){
-
-
-                                                                          Toast.makeText(getApplicationContext(), "Book already exist!", Toast.LENGTH_SHORT).show();
-                                                                      }
-                                                                      else{
-                                                                          // postRef.child(id).setValue(new Information(id, Titre, Description, Year, iconStar));
-                                                                          if (filePath != null) {
-                                                                              FilePath filePaths = new FilePath();
-                                                                              StorageReference childRef = storageRef.child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + id + "/photo 1");
-                                                                              //uploading the image
-                                                                              UploadTask uploadTask = childRef.putFile(filePath);
-
-                                                                              uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                                                                  public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                                                                                      childRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                                                          @Override
-                                                                                          public void onSuccess(Uri uri) {
-                                                                                              Ref.child(id).setValue(new Information(id, Titre, Description, Year, iconStar, uri.toString()));
-                                                                                          }
-                                                                                      });
-                                                                                      Toast.makeText(getApplicationContext(), "Book Added Successfully", Toast.LENGTH_SHORT).show();
-
-
-                                                                                  }
-                                                                              }).addOnFailureListener(new OnFailureListener() {
-                                                                                  @Override
-                                                                                  public void onFailure(@NonNull Exception e) {
-
-                                                                                  }
-                                                                              });
-                                                                          } else
-                                                                              Toast.makeText(getApplicationContext(), "Please select an image", Toast.LENGTH_SHORT).show();
-
-                                                                      }
-                                                                  }
-                                                             // }
-
-
-
-
-
-                                                              @Override
-                                                              public void onCancelled(@NonNull DatabaseError error) {
-                                                             //     Toast.makeText(getApplicationContext(), "Book not added", Toast.LENGTH_SHORT).show();
-
-                                                              }
-
-
-                                                          });*/
 
 
                                               }
