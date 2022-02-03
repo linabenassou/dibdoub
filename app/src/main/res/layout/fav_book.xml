@@ -4,46 +4,54 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="16dp"
     android:id="@+id/mycollection">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv2"
-        android:layout_width="@dimen/image_size"
-        android:layout_height="@dimen/image_size"
+        android:layout_width="114dp"
+        android:layout_height="146dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/ICbookXML1"
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/book_icon"
-            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
+
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.cardview.widget.CardView>
+
+
     <TextView
         android:id="@+id/txtTitleXML1"
         style="@style/defaultText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/marge"
+        android:layout_marginStart="20dp"
+        android:padding="16dp"
         android:text="@string/home_book_title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cv2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.122" />
 
     <TextView
         android:id="@+id/txtYearXML1"
+        style="@style/smallText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:padding="16dp"
         android:text="@string/home_book_year"
         app:layout_constraintStart_toStartOf="@+id/txtTitleXML1"
-        app:layout_constraintTop_toBottomOf="@+id/txtTitleXML1"
-        style="@style/smallText"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/txtTitleXML1" />
 
     <ImageButton
         android:id="@+id/ICStarXML1"

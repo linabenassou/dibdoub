@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -74,6 +76,8 @@ RecyclerView mRecyclerV;
             String id= info.getId();
             holder.book_ann_txt.setText(ann);
             holder.book_title_txt.setText(tit);
+            String image= info.getImage();
+            Picasso.get().load(image).into(holder.book_image);
 
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -139,15 +143,17 @@ RecyclerView mRecyclerV;
         }
 
         class MyViewHolderCat extends RecyclerView.ViewHolder  {
-            TextView book_title_txt, book_ann_txt ,book_image;
+            TextView book_title_txt, book_ann_txt ;
             ImageButton star,add;
+            ImageView book_image;
+
 
             MyViewHolderCat(@NonNull View itemView) {
                 super(itemView);
 
+                book_image = itemView.findViewById(R.id.ICbookXML1);
 
                 book_title_txt = itemView.findViewById(R.id.txtTitleXML1);
-                //  book_image = itemView.findViewById(R.id.ICbookXML);
                 star=itemView.findViewById(R.id.ICStarXML1);
                 book_ann_txt = itemView.findViewById(R.id.txtYearXML1);
 

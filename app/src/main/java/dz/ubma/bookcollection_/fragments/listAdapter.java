@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 
@@ -76,8 +79,16 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.MyViewHolderCa
        // String image=info.getImage();
         String ann=info.getYear();
         String id= info.getId();
+        String image= info.getImage();
         holder.book_ann_txt.setText(ann);
         holder.book_title_txt.setText(tit);
+        Picasso.get().load(image).into(holder.book_image);
+        //Log.d("lol",info.getImage());
+
+
+
+
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,7 +114,7 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.MyViewHolderCa
                 BookControler bControler= BookControler.get_instance();
                 bControler.updateData(idBook,info.getIconStar());
                 if(info.getIconStar()==1){
-                addFavoris(info,holder,tit,ann,desc,info.getIconStar());
+                addFavoris(info,holder,tit,ann,desc,info.getIconStar(),image);
                 }
 
             }
@@ -133,9 +144,9 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.MyViewHolderCa
 
     }
 
-    private void addFavoris(Information inf,MyViewHolderCategory holder,String Titre,String Year,String Description,int icstar) {
+    private void addFavoris(Information inf,MyViewHolderCategory holder,String Titre,String Year,String Description,int icstar,String image) {
         String Id=inf.getId();
-        Information info=new Information(Id,Titre,Description,Year,icstar);
+        Information info=new Information(Id,Titre,Description,Year,icstar,image);
         DatabaseReference ref= FirebaseDatabase.getInstance().getReference();
         ref.child("favoris").child(Id).setValue(info);
         Toast.makeText(context,"Added to favorite", Toast.LENGTH_SHORT).show();
@@ -151,13 +162,14 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.MyViewHolderCa
     class MyViewHolderCategory extends RecyclerView.ViewHolder {
         private favorisAdapter myAdapter;
 
-        TextView  book_title_txt, book_ann_txt ,book_image;
+        TextView  book_title_txt, book_ann_txt ;
+                ImageView book_image;
         ImageButton star,add;
 
         MyViewHolderCategory(@NonNull View itemView) {
             super(itemView);
             book_title_txt = itemView.findViewById(R.id.txtTitleXML);
-          //  book_image = itemView.findViewById(R.id.ICbookXML);
+            book_image = itemView.findViewById(R.id.ICbookXML);
             star=itemView.findViewById(R.id.ICStarXML);
             book_ann_txt = itemView.findViewById(R.id.txtYearXML);
 

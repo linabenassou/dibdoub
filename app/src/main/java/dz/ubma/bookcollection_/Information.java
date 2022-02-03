@@ -8,6 +8,9 @@ public class Information {
 
 
 
+    String image;
+
+
     int iconStar ;
 
 
@@ -15,17 +18,18 @@ public class Information {
     String id;
     String Year;
 public Information(){}
-public Information(String id, String Titre, String Description,String Year){//,String image// , String Description,){
+/*public Information(String id, String Titre, String Description,String Year){//,String image// , String Description,){
         this.id=id;
         this.Titre=Titre;
         this.Description=Description;
-        this.Year=Year;}
-public Information(String id, String Titre, String Description,String Year,int iconStar){//,String image// , String Description,){
+        this.Year=Year;}*/
+public Information(String id, String Titre, String Description,String Year,int iconStar,String image){//,String image// , String Description,){
     this.id=id;
     this.Titre=Titre;
     this.Description=Description;
     this.Year=Year;
     this.iconStar = iconStar;
+    this.image=image;
 
 }  public int getIconStar() {
         return iconStar;
@@ -73,6 +77,12 @@ public Information(String id, String Titre, String Description,String Year,int i
     }
 
 
+    public String getImage() {
+        return image;
+    }
 
+    public void setImage(String image) {
+        this.image = image;
+    }
     }
 

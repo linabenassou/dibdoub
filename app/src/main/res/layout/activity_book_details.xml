@@ -7,27 +7,53 @@
     android:layout_height="match_parent"
     tools:context=".BookDetails">
 
+    <RelativeLayout
+        android:id="@+id/m1"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize">
+
+        <TextView
+            android:id="@+id/t1"
+            style="@style/Appname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/marge"
+            android:layout_marginTop="8dp"
+
+            android:text="@string/app_tiltle" />
+
+        <TextView
+            android:id="@+id/t2"
+            style="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/t1"
+            android:layout_marginLeft="@dimen/marge"
+            android:text="Book detail"
+            app:layout_constraintStart_toStartOf="@+id/t1"
+            app:layout_constraintTop_toBottomOf="@+id/t1" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/title1"
         android:layout_width="340dp"
         android:layout_height="50dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:layout_marginTop="250dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="400dp"
+        android:ems="10"
         android:hint="Title"
+        android:inputType="textPersonName"
         tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/description1"
         android:layout_width="340dp"
         android:layout_height="50dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:layout_marginTop="350dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="450dp"
+        android:ems="10"
         android:hint="Description"
+        android:inputType="textPersonName"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -35,7 +61,7 @@
         android:layout_width="340dp"
         android:layout_height="50dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="450dp"
+        android:layout_marginTop="500dp"
         android:ems="10"
         android:hint="Year"
         android:inputType="textPersonName"
@@ -43,19 +69,20 @@
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="181dp"
-        android:layout_height="153dp"
+        android:layout_width="200dp"
+        android:layout_height="300dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="70dp"
         app:srcCompat="@drawable/book_icon"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="197dp"
-        tools:layout_editor_absoluteY="56dp" />
+        tools:ignore="MissingConstraints" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="410dp"
-        android:layout_height="wrap_content"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="670dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/green"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
@@ -67,10 +94,12 @@
         android:layout_width="123dp"
         android:layout_height="48dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="673dp"
+        android:layout_marginTop="682dp"
         android:background="#E1DCDC"
+
         android:drawableTop="@drawable/ic_home"
         android:text="Home"
+        app:layout_constraintBottom_toBottomOf="parent"
 
         tools:ignore="MissingConstraints" />
 
@@ -79,7 +108,7 @@
         android:layout_width="123dp"
         android:layout_height="48dp"
         android:layout_marginLeft="144dp"
-        android:layout_marginTop="673dp"
+        android:layout_marginTop="682dp"
         android:background="@color/yellow"
         android:drawableTop="@drawable/ic_f_start"
         android:text="My collection"
@@ -89,14 +118,12 @@
         android:id="@+id/add"
         android:layout_width="123dp"
         android:layout_height="48dp"
+        android:layout_gravity="right"
+        android:layout_marginLeft="280dp"
+        android:layout_marginTop="682dp"
+        android:background="@color/yellow"
         android:drawableTop="@drawable/ic_add"
         android:text="Add"
-        tools:ignore="MissingConstraints"
-        android:layout_marginTop="673dp"
-        android:layout_marginLeft="280dp"
-        android:background="@color/yellow"
-        />
-
-
+        tools:ignore="MissingConstraints" />
 
 </RelativeLayout>

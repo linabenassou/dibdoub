@@ -23,7 +23,7 @@
 
         <TextView
             android:id="@+id/textView2"
-            style="@style/defaultText"
+            style="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textView"
@@ -59,49 +59,53 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="410dp"
-        android:layout_height="wrap_content"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="670dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/green"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints" />
 
-    <Button
-        android:id="@+id/home"
-        android:layout_width="123dp"
-        android:layout_height="48dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="673dp"
-        android:background="#E1DCDC"
-        android:drawableTop="@drawable/ic_home"
-        android:text="Home"
+        <Button
+            android:id="@+id/home"
+            android:layout_width="123dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="682dp"
+            android:background="#E1DCDC"
 
-        tools:ignore="MissingConstraints" />
+            android:drawableTop="@drawable/ic_home"
+            android:text="Home"
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/mycollection"
         android:layout_width="123dp"
         android:layout_height="48dp"
         android:layout_marginLeft="144dp"
-        android:layout_marginTop="673dp"
+        android:layout_marginTop="682dp"
         android:background="@color/yellow"
         android:drawableTop="@drawable/ic_f_start"
         android:text="My collection"
         tools:ignore="MissingConstraints" />
 
-    <Button
-        android:id="@+id/add"
-        android:layout_width="123dp"
-        android:layout_height="48dp"
-        android:layout_marginLeft="280dp"
-        android:layout_marginTop="673dp"
-        android:background="@color/yellow"
-        android:drawableTop="@drawable/ic_add"
-        android:text="Add"
-        tools:ignore="MissingConstraints" />
+        <Button
+            android:id="@+id/add"
+            android:layout_width="123dp"
+            android:layout_height="48dp"
+            android:layout_gravity="right"
+            android:layout_marginLeft="280dp"
+            android:layout_marginTop="682dp"
+            android:background="@color/yellow"
+            android:drawableTop="@drawable/ic_add"
+            android:text="Add"
+            tools:ignore="MissingConstraints" />
 
 
 </RelativeLayout>

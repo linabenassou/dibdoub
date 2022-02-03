@@ -13,11 +13,13 @@ import androidx.core.content.FileProvider;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 
 import android.content.pm.PackageManager;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,15 +35,19 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseError;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.protobuf.Empty;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -50,22 +56,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class addbook extends AppCompatActivity {
-    private static final int REQUEST = 103;
     EditText title_input, Description_input, Year_input;
-    Button add_button,Home_button,Mycollection_button,confirm_button,loadImage_button;
+    Button add_button,Home_button,Mycollection_button,confirm_button,uploadImage_button;
     ImageView images;
-    private int imageCount = 0;
-    DatabaseReference mDatabase;
-    addbook mFirebaseMethods;
-    public static final int CAMERA_PERM_CODE = 101;
-    public static final int CAMERA_REQUEST_CODE = 102;
-    String currentPhotoPath;
-    private StorageReference mStorageReference;
-    private Context context;
+    DatabaseReference Ref;
+
     int iconStar=0;
-    DatabaseReference postRef;
-    public addbook() {
-    }
+    int PICK_IMAGE_REQUEST = 111;
+    Uri filePath;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,125 +76,194 @@ public class addbook extends AppCompatActivity {
         add_button = findViewById(R.id.add);
         Home_button = findViewById(R.id.home);
         Mycollection_button = findViewById(R.id.mycollection);
-        confirm_button=findViewById(R.id.confirmer);
-        images=findViewById(R.id.image);
-        loadImage_button=findViewById(R.id.limage);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mFirebaseMethods=new addbook(addbook.this);
-         postRef= FirebaseDatabase.getInstance().getReference("book");
+        confirm_button = findViewById(R.id.confirmer);
+        images = findViewById(R.id.image);
+        uploadImage_button = findViewById(R.id.limage);
+        Ref = FirebaseDatabase.getInstance().getReference().child("book");
 
-
-        mStorageReference = FirebaseStorage.getInstance().getReference();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://bibliotheques-a8f0e.appspot.com");
 
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"You are already in the Add book page", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "You are already in the Add book page", Toast.LENGTH_SHORT).show();
 
             }
         });
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        uploadImage_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                imageCount = mFirebaseMethods.getImageCount(dataSnapshot);
-                Log.d(TAG, "onDataChange: image count: " + imageCount);
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_PICK);
+                startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
+
+
+
         confirm_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String Titre =title_input.getText().toString();
-                String Description =Description_input.getText().toString();
-                String Year =Year_input.getText().toString();
-               // DatabaseReference data= FirebaseDatabase.getInstance().getReference("book");
-                //String id=data.push().getKey();
+                                              @Override
+                                              public void onClick(View view) {
+                                                  String Titre = title_input.getText().toString();
+                                                  String Description = Description_input.getText().toString();
+                                                  String Year = Year_input.getText().toString();
+                                                  // DatabaseReference data= FirebaseDatabase.getInstance().getReference("book");
+                                                  //String id=data.push().getKey();
 
-                if(TextUtils.isEmpty(Titre)){
-                    title_input.setError("Title is Required.");
-                    return;
-                }
+                                                  if (TextUtils.isEmpty(Titre)) {
+                                                      title_input.setError("Title is Required.");
+                                                      return;
+                                                  }
 
-                if(TextUtils.isEmpty(Description)){
-                    Description_input.setError("Description is Required.");
-                    return;
-                }
-                if(TextUtils.isEmpty(Year)){
-                    Year_input.setError("Year is Required.");
-                    return;
-                }
-
-
-
-                postRef = FirebaseDatabase.getInstance().getReference().child("book");
-                String id=postRef.push().getKey();
-
-                postRef.orderByChild("titre").equalTo(Titre)
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.exists()) {
-                                    Toast.makeText(getApplicationContext(), "Book already exist!", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    postRef.child(id).setValue(new Information(id, Titre, Description, Year, iconStar));
-                                    Toast.makeText(getApplicationContext(), "Book Added Successfully", Toast.LENGTH_SHORT).show();
-
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-
-
-                            });
+                                                  if (TextUtils.isEmpty(Description)) {
+                                                      Description_input.setError("Description is Required.");
+                                                      return;
+                                                  }
+                                                  if (TextUtils.isEmpty(Year)) {
+                                                      Year_input.setError("Year is Required.");
+                                                      return;
+                                                  }
+                                                  String id = Ref.push().getKey();
 
 
 
+                                                  Ref.orderByChild("titre").equalTo(Titre)
+                                                          .addListenerForSingleValueEvent(new ValueEventListener() {
+
+                                                              @Override
+                                                              public void onDataChange(DataSnapshot data) {
+                                                                  //If email exists then toast shows else store the data on new key
+                                                                  if (data.exists()){
+
+
+                                                                      Toast.makeText(getApplicationContext(), "Book already exist!", Toast.LENGTH_SHORT).show();
+                                                                  }
+                                                                  else{
+                                                                      // postRef.child(id).setValue(new Information(id, Titre, Description, Year, iconStar));
+                                                                      if (filePath != null) {
+                                                                          FilePath filePaths = new FilePath();
+                                                                          StorageReference childRef = storageRef.child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + id + "/photo 1");
+                                                                          //uploading the image
+                                                                          UploadTask uploadTask = childRef.putFile(filePath);
+
+                                                                          uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                                              public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                                                                  childRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                                      @Override
+                                                                                      public void onSuccess(Uri uri) {
+                                                                                          Ref.child(id).setValue(new Information(id, Titre, Description, Year, iconStar, uri.toString()));
+                                                                                      }
+                                                                                  });
+                                                                                  Toast.makeText(getApplicationContext(), "Book Added Successfully", Toast.LENGTH_SHORT).show();
+
+
+                                                                              }
+                                                                          }).addOnFailureListener(new OnFailureListener() {
+                                                                              @Override
+                                                                              public void onFailure(@NonNull Exception e) {
+
+                                                                              }
+                                                                          });
+                                                                      } else
+                                                                          Toast.makeText(getApplicationContext(), "Please select an image", Toast.LENGTH_SHORT).show();
+
+                                                                  }
+                                                              }
+                                                              // }
+
+                                                              @Override
+                                                              public void onCancelled(@NonNull DatabaseError error) {
+
+                                                              }
+
+
+                                                          });
+
+
+                                                 /* Query postRef = FirebaseDatabase.getInstance().getReference().child("book");
+
+
+                                                  postRef.orderByChild("titre").equalTo(Titre)
+                                                          .addListenerForSingleValueEvent(new ValueEventListener() {
 
 
 
 
-                /*mFirebaseDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(final DataSnapshot dataSnapshot) {
-                        for (DataSnapshot data : dataSnapshot.getChildren()) {
-                           if (!data.child(id).child(Titre).exists()) {
-                               mFirebaseDatabase.child(id).setValue(new Information(id, Titre, Description, Year, iconStar));
-                               Toast.makeText(getApplicationContext(), "Book Added Succesfully", Toast.LENGTH_SHORT).show();
-                           }
 
-                           else {
-                               Toast.makeText(getApplicationContext(), "Book already exist!", Toast.LENGTH_SHORT).show();
-                           }
-                        }}
+                                                              @Override
+                                                              public void onDataChange(DataSnapshot data) {
+                                                                      //If email exists then toast shows else store the data on new key
+                                                                      if (data.exists()){
 
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                                                                          Toast.makeText(getApplicationContext(), "Book already exist!", Toast.LENGTH_SHORT).show();
+                                                                      }
+                                                                      else{
+                                                                          // postRef.child(id).setValue(new Information(id, Titre, Description, Year, iconStar));
+                                                                          if (filePath != null) {
+                                                                              FilePath filePaths = new FilePath();
+                                                                              StorageReference childRef = storageRef.child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + id + "/photo 1");
+                                                                              //uploading the image
+                                                                              UploadTask uploadTask = childRef.putFile(filePath);
 
-                    }
-                    });
+                                                                              uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                                                  public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                                                                      childRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                                          @Override
+                                                                                          public void onSuccess(Uri uri) {
+                                                                                              Ref.child(id).setValue(new Information(id, Titre, Description, Year, iconStar, uri.toString()));
+                                                                                          }
+                                                                                      });
+                                                                                      Toast.makeText(getApplicationContext(), "Book Added Successfully", Toast.LENGTH_SHORT).show();
+
+
+                                                                                  }
+                                                                              }).addOnFailureListener(new OnFailureListener() {
+                                                                                  @Override
+                                                                                  public void onFailure(@NonNull Exception e) {
+
+                                                                                  }
+                                                                              });
+                                                                          } else
+                                                                              Toast.makeText(getApplicationContext(), "Please select an image", Toast.LENGTH_SHORT).show();
+
+                                                                      }
+                                                                  }
+                                                             // }
 
 
 
 
 
-*/
+                                                              @Override
+                                                              public void onCancelled(@NonNull DatabaseError error) {
+                                                             //     Toast.makeText(getApplicationContext(), "Book not added", Toast.LENGTH_SHORT).show();
+
+                                                              }
+
+
+                                                          });*/
+
+
+                                              }
 
 
 
 
 
-            }
-        });
+
+
+
+
+
+                                          }
+        );
         Home_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -206,202 +274,14 @@ public class addbook extends AppCompatActivity {
         Mycollection_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(addbook.this,mycollection.class);
+                Intent intent = new Intent(addbook.this, mycollection.class);
                 startActivity(intent);
             }
         });
-       /* loadImage_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-dispatchTakePictureIntent();            }
-        });
-*/
-    }
-
-    @SuppressLint("LongLogTag")
-    private void askCameraPermissions() {
-        if(ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.CAMERA}, CAMERA_PERM_CODE);
-            String[] PERMISSIONS = {android.Manifest.permission.READ_EXTERNAL_STORAGE,android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
-            ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST );
-
-        }else {
-            Log.d("liliwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww1", String.valueOf(1));
-
-            dispatchTakePictureIntent();
-
-        }}
-
-    @SuppressLint("LongLogTag")
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case CAMERA_PERM_CODE: {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.d("liliwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww2", String.valueOf(2));
-
-                dispatchTakePictureIntent();
-            } else {
-                Toast.makeText(this, "Camera Permission is Required to Use camera.", Toast.LENGTH_SHORT).show();
-            }}
-            case REQUEST:{
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    dispatchTakePictureIntent();
-
-                } else {
-                    Toast.makeText(this, "The app was not allowed to read your store.", Toast.LENGTH_LONG).show();
-                }
-            }
-        }
-    }
-    @SuppressLint({ "LongLogTag"})
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Log.d("liliwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww3", String.valueOf(3));
-
-        super.onActivityResult(requestCode, resultCode, data);
-
-                Log.d("liliwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww3", String.valueOf(3));
-
-                File f = new File(currentPhotoPath);
-                images.setImageURI(Uri.fromFile(f));
-                Log.d("tag", "Absolute Url of Image is " + Uri.fromFile(f));
-
-                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                Uri contentUri = Uri.fromFile(f);
-                mediaScanIntent.setData(contentUri);
-                this.sendBroadcast(mediaScanIntent);
-                DatabaseReference dat = FirebaseDatabase.getInstance().getReference("book");
-                String bookId = dat.push().getKey();
-
-                uploadImageToFirebase(f.getName(), contentUri, imageCount, bookId);
-
-
-
-
-        }
-
-    @SuppressLint("LongLogTag")
-    private File createImageFile() throws IOException {
-        // Create an image file name
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        Log.d("liliwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww4", String.valueOf(4));
-
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-        Log.d("liliwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww6", String.valueOf(4));
-
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-    public int getImageCount(DataSnapshot dataSnapshot){
-        int count = 0;
-        Intent intent=getIntent();
-        DatabaseReference data= FirebaseDatabase.getInstance().getReference("book");
-        String s=data.push().getKey();
-    for(DataSnapshot ds: dataSnapshot
-                .child("photo")
-                .child(s)
-                .getChildren()){
-            count++;
-        }
-        return count;
-    }
-    @SuppressLint("LongLogTag")
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            Log.d("liliwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww5", String.valueOf(5));
-
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-
-            } catch (IOException ex) {
-                ex.printStackTrace();
-
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.example.android.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                File f = new File(currentPhotoPath);
-                images.setImageURI(Uri.fromFile(f));
-                Log.d("tag", "Absolute Url of Image is " + Uri.fromFile(f));
-
-                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                Uri contentUri = Uri.fromFile(f);
-                mediaScanIntent.setData(contentUri);
-                this.sendBroadcast(mediaScanIntent);
-                DatabaseReference dat = FirebaseDatabase.getInstance().getReference("book");
-                String bookId = dat.push().getKey();
-
-                uploadImageToFirebase(f.getName(), contentUri, imageCount, bookId);
-
-            }
-        }
-    }
-    private void uploadImageToFirebase(String name, final Uri contentUri, int count,String id) {
-
-        FilePath filePaths = new FilePath();
-
-        Log.d(TAG, "uploadNewPhoto: uploading NEW photo.");
-
-
-        final StorageReference image = mStorageReference
-                .child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + id + "/photo" + (count + 1));
-        image.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Log.d("tag", "onSuccess: Uploaded Image URl is " + uri.toString());
-                        Picasso.get().load(uri).into(images);
-                        addPhotoToDatabase(uri.toString(),id);
-                        // addPhotoToDatabase(image.getDownloadUrl().toString());
-                    }
-                });
-
-                Toast.makeText(addbook.this, "Image Is Uploaded.", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(addbook.this, "Upload Failed.", Toast.LENGTH_SHORT).show();
-            }
-        });
 
     }
-    private void addPhotoToDatabase(String url,String id){
-        Log.d(TAG, "addPhotoToDatabase: adding photo to database.");
 
-        String l=url;
-        //insert into database
-        mDatabase.child("book")
-                .child(id).child("image_path").setValue(l);
 
-    }
-    public addbook(Context context) {
-
-        mDatabase= FirebaseDatabase.getInstance().getReference();
-        context = context;
-
-    }
 
    /* public void addInfos(String id,String Titre,String Description,String Year,int icstar){
         DatabaseReference data= FirebaseDatabase.getInstance().getReference();
@@ -411,4 +291,22 @@ dispatchTakePictureIntent();            }
 
 
     }*/
+   @Override
+   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+       super.onActivityResult(requestCode, resultCode, data);
+
+       if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+           filePath = data.getData();
+
+           try {
+               //getting image from gallery
+               Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+
+               //Setting image to ImageView
+               images.setImageBitmap(bitmap);
+           } catch (Exception e) {
+               e.printStackTrace();
+           }
+       }
+   }
 }

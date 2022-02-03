@@ -68,69 +68,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         loadcategories();
-       /* FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fl, new home_fragment2());
-        ft.addToBackStack(null);
-        ft.commit();*/
 
-
-
-
-
-
-
-
-        /*ref.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-
-                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                    setInfo(dataSnapshot);
-
-
-
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-
-                    setInfo(dataSnapshot);
-
-
-                }
-            }
-
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Log.d(TAG, "Failed to read value.", error.toException());
-            }
-        });*/
     }
 
     private void loadcategories() {
         infos=new ArrayList<>();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("book");
         ref.addValueEventListener(new ValueEventListener() {
-            @SuppressLint("LongLogTag")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 infos.clear();
                 for (DataSnapshot ds:snapshot.getChildren()){
                     Information infor=ds.getValue(Information.class);
-                    Log.d("liliwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww", String.valueOf(infor));
 
 
                     infos.add(infor);
